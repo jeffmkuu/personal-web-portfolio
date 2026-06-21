@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geofrey Waithaka — Frontend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --panel: #0f1722;
+    --panel-border: #1c2733;
+    --accent: #00ff9d;
+    --accent-dim: #00ff9d33;
+    --teal: #5eead4;
+    --muted: #8b95a7;
+    --text: #e6edf3;
+    --mono: "JetBrains Mono", monospace;
+    --sans: "Inter", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--panel-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--panel-border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.18;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--accent-dim); color: var(--accent); }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 14, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-links .num { color: var(--accent); margin-right: 4px; }
+
+  .nav-toggle { display: none; }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 80px 0 60px;
+  }
+
+  .terminal {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 30px 80px -20px rgba(0, 255, 157, 0.08), 0 0 0 1px rgba(255,255,255,0.02);
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #0c121b;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+
+  .terminal-title {
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .terminal-body {
+    padding: 32px 28px 38px;
+    font-family: var(--mono);
+  }
+
+  .line { color: var(--muted); font-size: 0.92rem; margin-bottom: 6px; }
+  .prompt-char { color: var(--accent); }
+
+  .hero-name {
+    font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+    font-weight: 800;
+    color: var(--text);
+    margin: 14px 0 6px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid var(--accent);
+    width: 0;
+    animation: typing 1.6s steps(20, end) 0.3s forwards, blink 0.8s step-end infinite;
+  }
+
+  @keyframes typing { from { width: 0; } to { width: 100%; } }
+  @keyframes blink { 50% { border-color: transparent; } }
+
+  .hero-role {
+    font-size: 1.05rem;
+    color: var(--teal);
+    margin-bottom: 18px;
+  }
+  .hero-role .bracket { color: var(--muted); }
+
+  .hero-desc {
+    font-family: var(--sans);
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+  .hero-desc strong { color: var(--text); font-weight: 600; }
+
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 13px 24px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #04140d;
+  }
+  .btn-primary:hover { background: var(--teal); transform: translateY(-2px); }
+
+  .btn-ghost {
+    border-color: var(--panel-border);
+    color: var(--text);
+    background: transparent;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTION SHARED */
+  section { padding: 100px 0; position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before { content: "//"; color: var(--muted); }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 50px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    font-size: 1.02rem;
+    margin-bottom: 18px;
+  }
+  .about-text strong { color: var(--text); }
+
+  .skills-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 28px;
+  }
+
+  .skills-panel-title {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .skill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+  }
+  .skill-row:last-child { margin-bottom: 0; }
+  .skill-name { color: var(--text); }
+  .skill-tag {
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+
+  /* PROJECTS */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 26px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+  }
+
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .file-icon {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: #0c121b;
+    padding: 4px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--panel-border);
+  }
+
+  .project-title {
+    font-family: var(--mono);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .project-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 18px;
+  }
+
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--teal);
+    border: 1px solid var(--panel-border);
+    padding: 4px 9px;
+    border-radius: 4px;
+  }
+
+  .project-links { display: flex; gap: 18px; font-family: var(--mono); font-size: 0.82rem; }
+  .project-links a { color: var(--muted); transition: color 0.2s ease; }
+  .project-links a:hover { color: var(--accent); }
+
+  .placeholder-note {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0.7;
+    margin-top: 6px;
+  }
+
+  /* CONTACT */
+  .contact-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 640px;
+  }
+
+  .env-line {
+    display: flex;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--panel-border);
+    flex-wrap: wrap;
+  }
+  .env-line:last-child { border-bottom: none; }
+  .env-key { color: var(--accent); min-width: 110px; }
+  .env-val { color: var(--text); }
+  .env-val a:hover { color: var(--teal); }
+
+  .contact-cta {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--panel-border);
+    padding: 32px 0;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  footer .accent { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 760px) {
+    .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
+    .hero-name { white-space: normal; border-right: none; animation: fadeIn 0.6s ease forwards; width: auto; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .terminal-body { padding: 24px 20px 30px; }
+    section { padding: 70px 0; }
+    .contact-panel { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">geofrey<span>.dev</span></div>
+    <ul class="nav-links">
+      <li><a href="#home"><span class="num">01.</span>home</a></li>
+      <li><a href="#about"><span class="num">02.</span>about</a></li>
+      <li><a href="#projects"><span class="num">03.</span>projects</a></li>
+      <li><a href="#contact"><span class="num">04.</span>contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="container">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="terminal-title">geofrey@portfolio:~</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt-char">$</span> whoami</div>
+        <h1 class="hero-name">Geofrey Waithaka</h1>
+        <p class="hero-role"><span class="bracket">&gt;</span> Frontend &amp; Web Developer</p>
+        <p class="hero-desc">I build <strong>fast, clean, responsive</strong> web interfaces — turning designs into interfaces that load quickly, work on every screen, and feel good to use.</p>
+        <div class="btn-row">
+          <a href="#projects" class="btn btn-primary">View projects</a>
+          <a href="#contact" class="btn btn-ghost">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <p class="eyebrow">about</p>
+    <h2 class="section-title">A bit about me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm <strong>Geofrey Waithaka</strong>, a frontend developer focused on building web interfaces that are clean, fast, and easy to use. I care about the details that most people don't notice — the spacing, the load time, the way a button feels when you click it.</p>
+        <p>I work mainly with <strong>HTML, CSS, and JavaScript</strong>, building responsive layouts and interactive interfaces that work well across devices. I enjoy turning an idea or a design into something people can actually click through and use.</p>
+        <p>I'm currently looking to take on more projects and grow as a developer — if you've got something in mind, I'd like to hear about it.</p>
+      </div>
+      <div class="skills-panel">
+        <div class="skills-panel-title">skills.json</div>
+        <div class="skill-row"><span class="skill-name">HTML / CSS</span><span class="skill-tag">core</span></div>
+        <div class="skill-row"><span class="skill-name">JavaScript</span><span class="skill-tag">core</span></div>
+        <div class="skill-row"><span class="skill-name">Responsive Design</span><span class="skill-tag">core</span></div>
+        <div class="skill-row"><span class="skill-name">Git &amp; GitHub</span><span class="skill-tag">tools</span></div>
+        <div class="skill-row"><span class="skill-name">React</span><span class="skill-tag">learning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <p class="eyebrow">projects</p>
+    <h2 class="section-title">Things I've built</h2>
+    <div class="project-grid">
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="file-icon">project-01.html</span>
+        </div>
+        <h3 class="project-title">Project Name One</h3>
+        <p class="project-desc">A short description of what this project does and the problem it solves. Replace with your real project summary.</p>
+        <div class="tag-row">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JS</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Live demo →</a>
+          <a href="#">Source code →</a>
+        </div>
+        <p class="placeholder-note">// swap this with a real project</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="file-icon">project-02.html</span>
+        </div>
+        <h3 class="project-title">Project Name Two</h3>
+        <p class="project-desc">A short description of what this project does and the problem it solves. Replace with your real project summary.</p>
+        <div class="tag-row">
+          <span class="tag">React</span>
+          <span class="tag">API</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Live demo →</a>
+          <a href="#">Source code →</a>
+        </div>
+        <p class="placeholder-note">// swap this with a real project</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="file-icon">project-03.html</span>
+        </div>
+        <h3 class="project-title">Project Name Three</h3>
+        <p class="project-desc">A short description of what this project does and the problem it solves. Replace with your real project summary.</p>
+        <div class="tag-row">
+          <span class="tag">CSS</span>
+          <span class="tag">Design</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Live demo →</a>
+          <a href="#">Source code →</a>
+        </div>
+        <p class="placeholder-note">// swap this with a real project</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-head">
+          <span class="file-icon">project-04.html</span>
+        </div>
+        <h3 class="project-title">Project Name Four</h3>
+        <p class="project-desc">A short description of what this project does and the problem it solves. Replace with your real project summary.</p>
+        <div class="tag-row">
+          <span class="tag">JavaScript</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Live demo →</a>
+          <a href="#">Source code →</a>
+        </div>
+        <p class="placeholder-note">// swap this with a real project</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <p class="eyebrow">contact</p>
+    <h2 class="section-title">Let's work together</h2>
+    <div class="contact-panel">
+      <div class="env-line">
+        <span class="env-key">NAME</span>
+        <span class="env-val">Geofrey Waithaka</span>
+      </div>
+      <div class="env-line">
+        <span class="env-key">EMAIL</span>
+        <span class="env-val"><a href="mailto:jeffwaithaka802@gmail.com">jeffwaithaka802@gmail.com</a></span>
+      </div>
+      <div class="env-line">
+        <span class="env-key">PHONE</span>
+        <span class="env-val"><a href="tel:+254115430100">0115 430 100</a></span>
+      </div>
+      <div class="env-line">
+        <span class="env-key">STATUS</span>
+        <span class="env-val" style="color: var(--accent);">available for work</span>
+      </div>
+      <div class="contact-cta">
+        <a href="mailto:jeffwaithaka802@gmail.com" class="btn btn-primary">Send an email</a>
+        <a href="tel:+254115430100" class="btn btn-ghost">Call me</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span class="accent">&lt;/&gt;</span> Built by Geofrey Waithaka — © <span id="year"></span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
